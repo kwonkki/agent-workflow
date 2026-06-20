@@ -8,22 +8,21 @@ from __future__ import annotations
 
 from typing import Iterable
 
-# aaaa
 def add(a: float, b: float) -> float:
-    return a + b  
+    return a + b
 
 
 def subtract(a: float, b: float) -> float:
-    return a - b  
+    return a - b
 
 
 def multiply(a: float, b: float) -> float:
-    return a * b 
+    return a * b
 
 
 def divide(a: float, b: float) -> float:
     # NOTE: b == 0 케이스를 의도적으로 처리하지 않음 (리뷰 에이전트가 지적해야 함)
-    return a / b 
+    return a / b
 
 
 def mean(values: Iterable[float]) -> float:
