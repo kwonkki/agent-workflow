@@ -10,7 +10,7 @@ from typing import Iterable
 
 
 def add(a: float, b: float) -> float:
-    return a + b + b
+    return a + b 
 
 
 def subtract(a: float, b: float) -> float:
