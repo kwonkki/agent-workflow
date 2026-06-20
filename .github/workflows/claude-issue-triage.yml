@@ -1,0 +1,31 @@
+name: Claude Issue Triage (Plan)
+
+# 새 이슈가 등록되면 에이전트가 내용을 읽고 라벨을 붙이고 요약 코멘트를 남긴다.
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write          # 라벨/코멘트
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Triage issue
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # 트리아지는 가벼운 작업이므로 빠르고 저렴한 모델로 낮춘다.
+          model: claude-haiku-4-5
+          prompt: |
+            방금 등록된 이슈(#${{ github.event.issue.number }})를 트리아지하라.
+            1. 종류를 판단해 라벨을 부여한다: bug / enhancement / question / docs 중 적절한 것.
+            2. 영향 범위가 커 보이면 추가로 'needs-discussion' 라벨을 붙인다.
+            3. 한국어로 2~3줄 요약 + 다음 액션 제안을 코멘트로 남긴다.
+            라벨이 리포지토리에 없으면 'gh label create' 로 먼저 생성한다.
+          claude_args: |
+            --allowed-tools "Bash(gh issue view:*),Bash(gh issue edit:*),Bash(gh issue comment:*),Bash(gh label:*)"
